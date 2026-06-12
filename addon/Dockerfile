@@ -3,7 +3,7 @@ ARG BUILD_FROM
 
 FROM brodiepeers/lxp-bridge:${BUILD_VERSION} AS lxp-bridge
 
-FROM $BUILD_FROM
+FROM ghcr.io/home-assistant/amd64-base:latest
 COPY --from=lxp-bridge / /
 
 RUN echo "$MIRROR/alpine/edge/community" >> /etc/apk/repositories
