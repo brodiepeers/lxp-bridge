@@ -1,7 +1,7 @@
 ARG BUILD_VERSION
 ARG BUILD_FROM
 
-FROM celsworth/lxp-bridge:${BUILD_VERSION} AS lxp-bridge
+FROM brodiepeers/lxp-bridge:${BUILD_VERSION} AS lxp-bridge
 
 FROM ghcr.io/home-assistant/amd64-base:latest
 COPY --from=lxp-bridge / /
