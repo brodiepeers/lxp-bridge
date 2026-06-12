@@ -1,5 +1,5 @@
 name: lxp-bridge
-version: v0.13.3
+version: v0.13.4
 slug: lxp-bridge
 description: Allows local communication with Luxpower inverters and bridges it to MQTT
 arch:
