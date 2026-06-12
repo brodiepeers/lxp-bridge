@@ -1,24 +1,25 @@
-# Stage 1: Build the Rust application using an Alpine-based compiler
-FROM rust:1.75-alpine AS builder
+# Stage 1: Build the Rust application from raw source code
+FROM rust:1.75-slim AS builder
 
-# Install building tools required for compilation on Alpine
-RUN apk add --no-cache musl-dev openssl-dev pkgconfig git
+RUN apt-get update && apt-get install -y pkg-config libssl-dev git && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/src
+# Clone the repo directly inside the container to grab the root source files
 RUN git clone https://github.com/brodiepeers/lxp-bridge.git app
 
 WORKDIR /usr/src/app
-# Force Rust to build using the musl target for absolute portability
-RUN RUSTFLAGS="-C target-feature=+crt-static" cargo build --release --target x86_64-unknown-linux-musl
+RUN cargo build --release
 
 # Stage 2: Bundle the compiled binary into the Home Assistant wrapper
 FROM ghcr.io/home-assistant/amd64-base:latest
 
+# Install runtime dependencies needed by run.sh (yq)
 RUN apk add --no-cache yq
 
-# Copy the static binary from the musl target build directory
-COPY --from=builder /usr/src/app/target/x86_64-unknown-linux-musl/release/lxp-bridge /usr/local/bin/lxp-bridge
+# Copy the fresh compiled binary from the builder stage
+COPY --from=builder /usr/src/app/target/release/lxp-bridge /usr/local/bin/lxp-bridge
 
+# Copy startup scripts from the local build context
 COPY run.sh /
 RUN chmod a+x /run.sh
 
