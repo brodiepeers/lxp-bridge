@@ -17,7 +17,7 @@ FROM ghcr.io/home-assistant/amd64-base:latest
 RUN apk add --no-cache yq
 
 # Copy the fresh compiled binary from the builder stage
-COPY --from=builder /usr/src/app/target/release/lxp-bridge /usr/bin/lxp-bridge
+COPY --from=builder /usr/src/app/target/release/lxp-bridge /usr/local/bin/lxp-bridge
 
 # Copy startup scripts from the local build context
 COPY run.sh /
