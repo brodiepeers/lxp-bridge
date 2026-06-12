@@ -13,6 +13,9 @@ RUN cargo build --release
 # Stage 2: Bundle the compiled binary into the Home Assistant wrapper
 FROM ghcr.io/home-assistant/amd64-base:latest
 
+# Install runtime dependencies needed by run.sh (yq)
+RUN apk add --no-cache yq
+
 # Copy the fresh compiled binary from the builder stage
 COPY --from=builder /usr/src/app/target/release/lxp-bridge /usr/bin/lxp-bridge
 
