@@ -15,7 +15,7 @@ FROM ghcr.io/home-assistant/amd64-base:latest
 COPY --from=builder /usr/src/lxp-bridge/target/release/lxp-bridge /usr/bin/lxp-bridge
 
 # Copy any required startup scripts/configs from your repository root
-COPY addon/run.sh /
+COPY run.sh /
 RUN chmod a+x /run.sh
 
 CMD [ "/run.sh" ]
